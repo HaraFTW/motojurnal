@@ -1,0 +1,55 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Rules\PlateNumber;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+
+class LoginController extends Controller
+{
+    public function create(): View
+    {
+        return view('auth.login');
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'plate_number' => ['required', 'string', new PlateNumber],
+            'remember' => ['sometimes', 'boolean'],
+        ]);
+
+        $plateNumber = User::normalizePlateNumber($validated['plate_number']);
+
+        $user = User::query()
+            ->where('plate_number', $plateNumber)
+            ->first();
+
+        if (! $user) {
+            $user = User::create([
+                'plate_number' => $validated['plate_number'],
+            ]);
+        }
+
+        Auth::login($user, $request->boolean('remember'));
+
+        $request->session()->regenerate();
+
+        return redirect()->route('dashboard');
+    }
+
+    public function destroy(Request $request): RedirectResponse
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
+    }
+}

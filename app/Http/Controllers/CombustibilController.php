@@ -1,0 +1,85 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Concerns\AuthorizesUserOwnership;
+use App\Models\Combustibil;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
+
+class CombustibilController extends Controller
+{
+    use AuthorizesUserOwnership;
+
+    public function index(): View
+    {
+        $entries = auth()->user()
+            ->combustibil()
+            ->latest()
+            ->get();
+
+        $consumptionChartData = Combustibil::consumptionChartDataForUser(auth()->user());
+
+        return view('fuel.index', compact('entries', 'consumptionChartData'));
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate($this->validationRules());
+
+        auth()->user()->combustibil()->create($validated);
+
+        return redirect()
+            ->route('fuel.index')
+            ->with('success', 'Înregistrare salvată.');
+    }
+
+    public function update(Request $request, Combustibil $combustibil): RedirectResponse
+    {
+        $this->authorizeUserOwnership($combustibil);
+
+        $validator = Validator::make($request->all(), $this->validationRules());
+
+        if ($validator->fails()) {
+            return redirect()
+                ->route('fuel.index')
+                ->withInput()
+                ->with('editing_fuel_id', $combustibil->id)
+                ->withErrors($validator);
+        }
+
+        $combustibil->update($validator->validated());
+
+        return redirect()
+            ->route('fuel.index')
+            ->with('success', 'Înregistrare actualizată.');
+    }
+
+    public function destroy(Combustibil $combustibil): RedirectResponse
+    {
+        $this->authorizeUserOwnership($combustibil);
+
+        $combustibil->delete();
+
+        return redirect()
+            ->route('fuel.index')
+            ->with('success', 'Înregistrare ștearsă.');
+    }
+
+    /**
+     * @return array<string, list<string>>
+     */
+    private function validationRules(): array
+    {
+        return [
+            'kilometers' => ['required', 'decimal:0,1', 'min:0'],
+            'liters' => ['required', 'decimal:0,1', 'min:0'],
+            'total_price' => ['nullable', 'decimal:0,1', 'min:0'],
+            'price_per_liter' => ['nullable', 'decimal:0,1', 'min:0'],
+            'total_kilometers' => ['nullable', 'decimal:0,1', 'min:0'],
+            'observations' => ['nullable', 'string', 'max:255'],
+        ];
+    }
+}
