@@ -39,6 +39,7 @@ class EventTest extends TestCase
         $response = $this->actingAs($user)->post('/evenimente', [
             'event_type_id' => (string) $eventType->id,
             'kilometers' => '12345.5',
+            'event_date' => '2024-03-15',
             'observations' => 'Revizie generala',
         ]);
 
@@ -49,7 +50,28 @@ class EventTest extends TestCase
             'user_id' => $user->id,
             'event_type_id' => $eventType->id,
             'kilometers' => '12345.5',
+            'event_date' => '2024-03-15 00:00:00',
             'observations' => 'Revizie generala',
+        ]);
+    }
+
+    public function test_event_date_defaults_to_today_when_omitted(): void
+    {
+        $user = User::factory()->create(['plate_number' => 'B123ABC']);
+        $eventType = EventType::query()->where('event_name', 'Altele')->firstOrFail();
+
+        $this->travelTo('2024-06-10 15:30:00');
+
+        $response = $this->actingAs($user)->post('/evenimente', [
+            'event_type_id' => (string) $eventType->id,
+            'kilometers' => '1000.0',
+        ]);
+
+        $response->assertRedirect(route('events.index'));
+
+        $this->assertDatabaseHas('events', [
+            'user_id' => $user->id,
+            'event_date' => '2024-06-10 00:00:00',
         ]);
     }
 
@@ -75,11 +97,13 @@ class EventTest extends TestCase
         Event::create([
             'user_id' => $user->id,
             'event_type_id' => $eventType->id,
+            'event_date' => '2024-01-01',
             'kilometers' => 1000.0,
         ]);
         Event::create([
             'user_id' => $other->id,
             'event_type_id' => $eventType->id,
+            'event_date' => '2024-01-02',
             'kilometers' => 2000.0,
         ]);
 
@@ -98,12 +122,14 @@ class EventTest extends TestCase
         $entry = Event::create([
             'user_id' => $user->id,
             'event_type_id' => $eventType->id,
+            'event_date' => '2024-01-01',
             'kilometers' => 1000.0,
         ]);
 
         $response = $this->actingAs($user)->put(route('events.update', $entry), [
             'event_type_id' => (string) $eventType->id,
             'kilometers' => '2500.0',
+            'event_date' => '2024-05-20',
             'observations' => 'Actualizat',
         ]);
 
@@ -112,6 +138,7 @@ class EventTest extends TestCase
         $this->assertDatabaseHas('events', [
             'id' => $entry->id,
             'kilometers' => '2500.0',
+            'event_date' => '2024-05-20 00:00:00',
             'observations' => 'Actualizat',
         ]);
     }
@@ -123,6 +150,7 @@ class EventTest extends TestCase
         $entry = Event::create([
             'user_id' => $user->id,
             'event_type_id' => $eventType->id,
+            'event_date' => '2024-01-01',
             'kilometers' => 1000.0,
         ]);
 
@@ -141,6 +169,7 @@ class EventTest extends TestCase
         $entry = Event::create([
             'user_id' => $other->id,
             'event_type_id' => $eventType->id,
+            'event_date' => '2024-01-01',
             'kilometers' => 1000.0,
         ]);
 

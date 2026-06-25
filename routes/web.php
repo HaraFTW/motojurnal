@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CombustibilController;
+use App\Http\Controllers\DistanceUnitController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\UleiController;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::patch('/distance-unit', [DistanceUnitController::class, 'update'])->name('distance-unit.update');
     Route::get('/dashboard', fn () => view('dashboard'))->name('dashboard');
     Route::get('/combustibil', [CombustibilController::class, 'index'])->name('fuel.index');
     Route::post('/combustibil', [CombustibilController::class, 'store'])->name('fuel.store');

@@ -24,20 +24,14 @@
         @method('PUT')
 
         <div class="space-y-4 rounded-2xl border border-zinc-800 bg-zinc-950 p-5">
-            <div>
-                <label for="fuel_edit_kilometers_{{ $entry->id }}" class="mb-2 block text-sm font-medium text-zinc-300">Kilometri</label>
-                <input
-                    id="fuel_edit_kilometers_{{ $entry->id }}"
-                    name="kilometers"
-                    type="number"
-                    inputmode="decimal"
-                    step="0.1"
-                    min="0"
-                    value="{{ old('kilometers', $entry->kilometers) }}"
-                    class="{{ $inputClass }}"
-                    required
-                >
-            </div>
+            <x-distance-input
+                name="kilometers"
+                field="kilometers"
+                :id="'fuel_edit_kilometers_'.$entry->id"
+                :km-value="$entry->kilometers"
+                :input-class="$inputClass"
+                required
+            />
 
             <div>
                 <label for="fuel_edit_liters_{{ $entry->id }}" class="mb-2 block text-sm font-medium text-zinc-300">Litri combustibil</label>
@@ -86,21 +80,14 @@
                 >
             </div>
 
-            <div>
-                <label for="fuel_edit_total_kilometers_{{ $entry->id }}" class="mb-2 block text-sm font-medium text-zinc-300">
-                    Total kilometri <span class="font-normal text-zinc-500">(optional)</span>
-                </label>
-                <input
-                    id="fuel_edit_total_kilometers_{{ $entry->id }}"
-                    name="total_kilometers"
-                    type="number"
-                    inputmode="decimal"
-                    step="0.1"
-                    min="0"
-                    value="{{ old('total_kilometers', $entry->total_kilometers) }}"
-                    class="{{ $inputClass }}"
-                >
-            </div>
+            <x-distance-input
+                name="total_kilometers"
+                field="total_kilometers"
+                :id="'fuel_edit_total_kilometers_'.$entry->id"
+                :km-value="$entry->total_kilometers"
+                :input-class="$inputClass"
+                optional
+            />
 
             <div>
                 <label for="fuel_edit_observations_{{ $entry->id }}" class="mb-2 block text-sm font-medium text-zinc-300">

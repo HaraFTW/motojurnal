@@ -45,7 +45,7 @@
                         <article class="rounded-2xl border border-zinc-800 bg-zinc-950 p-4">
                             <div class="mb-3 flex items-start justify-between gap-3">
                                 <p class="text-xs text-zinc-500">
-                                    {{ $entry->created_at->format('d.m.Y H:i') }}
+                                    {{ $entry->event_date->format('d.m.Y') }}
                                 </p>
                                 <x-history-actions
                                     :edit-dialog-id="'event-edit-'.$entry->id"
@@ -129,19 +129,19 @@
 
                 <div class="space-y-4 rounded-2xl border border-zinc-800 bg-zinc-900 p-5">
                     <div>
-                        <label for="kilometers" class="mb-2 block text-sm font-medium text-zinc-300">Kilometri</label>
+                        <label for="event_date" class="mb-2 block text-sm font-medium text-zinc-300">
+                            Data <span class="font-normal text-zinc-500">(optional)</span>
+                        </label>
                         <input
-                            id="kilometers"
-                            name="kilometers"
-                            type="number"
-                            inputmode="decimal"
-                            step="0.1"
-                            min="0"
-                            value="{{ old('kilometers') }}"
-                            class="block w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3.5 text-base text-zinc-100 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30"
-                            required
+                            id="event_date"
+                            name="event_date"
+                            type="date"
+                            value="{{ old('event_date') }}"
+                            class="block w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3.5 text-base text-zinc-100 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 [color-scheme:dark]"
                         >
                     </div>
+
+                    <x-distance-input name="kilometers" field="kilometers" required />
 
                     <div>
                         <label for="observations" class="mb-2 block text-sm font-medium text-zinc-300">

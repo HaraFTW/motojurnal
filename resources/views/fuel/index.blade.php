@@ -168,20 +168,7 @@
             @endif
 
             <div class="space-y-4 rounded-2xl border border-zinc-800 bg-zinc-900 p-5">
-                <div>
-                    <label for="kilometers" class="mb-2 block text-sm font-medium text-zinc-300">Kilometri</label>
-                    <input
-                        id="kilometers"
-                        name="kilometers"
-                        type="number"
-                        inputmode="decimal"
-                        step="0.1"
-                        min="0"
-                        value="{{ old('kilometers') }}"
-                        class="block w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3.5 text-base text-zinc-100 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30"
-                        required
-                    >
-                </div>
+                <x-distance-input name="kilometers" field="kilometers" required />
 
                 <div>
                     <label for="liters" class="mb-2 block text-sm font-medium text-zinc-300">Litri combustibil</label>
@@ -230,21 +217,7 @@
                     >
                 </div>
 
-                <div>
-                    <label for="total_kilometers" class="mb-2 block text-sm font-medium text-zinc-300">
-                        Total kilometri <span class="font-normal text-zinc-500">(optional)</span>
-                    </label>
-                    <input
-                        id="total_kilometers"
-                        name="total_kilometers"
-                        type="number"
-                        inputmode="decimal"
-                        step="0.1"
-                        min="0"
-                        value="{{ old('total_kilometers') }}"
-                        class="block w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3.5 text-base text-zinc-100 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30"
-                    >
-                </div>
+                <x-distance-input name="total_kilometers" field="total_kilometers" optional />
 
                 <div>
                     <label for="observations" class="mb-2 block text-sm font-medium text-zinc-300">

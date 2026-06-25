@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Concerns\AuthorizesUserOwnership;
+use App\Http\Controllers\Concerns\ConvertsDistanceInput;
 use App\Models\Event;
 use App\Models\EventType;
 use Illuminate\Http\RedirectResponse;
@@ -13,7 +14,7 @@ use Illuminate\View\View;
 
 class EventController extends Controller
 {
-    use AuthorizesUserOwnership;
+    use AuthorizesUserOwnership, ConvertsDistanceInput;
 
     public function index(): View
     {
@@ -33,7 +34,10 @@ class EventController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate($this->validationRules());
+        $validated = $this->convertDistanceFieldsToKm(
+            $this->validatedEventData($request),
+            ['kilometers'],
+        );
 
         auth()->user()->events()->create($validated);
 
@@ -56,7 +60,10 @@ class EventController extends Controller
                 ->withErrors($validator);
         }
 
-        $event->update($validator->validated());
+        $event->update($this->convertDistanceFieldsToKm(
+            $this->applyDefaultEventDate($validator->validated()),
+            ['kilometers'],
+        ));
 
         return redirect()
             ->route('events.index')
@@ -77,6 +84,27 @@ class EventController extends Controller
     /**
      * @return array<string, mixed>
      */
+    private function validatedEventData(Request $request): array
+    {
+        return $this->applyDefaultEventDate($request->validate($this->validationRules()));
+    }
+
+    /**
+     * @param  array<string, mixed>  $validated
+     * @return array<string, mixed>
+     */
+    private function applyDefaultEventDate(array $validated): array
+    {
+        if (empty($validated['event_date'])) {
+            $validated['event_date'] = now()->toDateString();
+        }
+
+        return $validated;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
     private function validationRules(): array
     {
         return [
@@ -85,6 +113,7 @@ class EventController extends Controller
                 Rule::exists('event_types', 'id')->where('active', true),
             ],
             'kilometers' => ['required', 'decimal:0,1', 'min:0'],
+            'event_date' => ['nullable', 'date'],
             'observations' => ['nullable', 'string', 'max:255'],
         ];
     }

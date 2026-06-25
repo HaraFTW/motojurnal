@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['oil_type', 'active'])]
+#[Fillable(['oil_type', 'priority', 'active'])]
 class TipUlei extends Model
 {
     protected $table = 'tipuri_ulei';
@@ -35,6 +35,7 @@ class TipUlei extends Model
     protected function casts(): array
     {
         return [
+            'priority' => 'integer',
             'active' => 'boolean',
         ];
     }

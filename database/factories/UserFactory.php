@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\DistanceUnit;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -22,6 +23,7 @@ class UserFactory extends Factory
 
         return [
             'plate_number' => $plateNumber,
+            'distance_unit' => DistanceUnit::Km,
             'name' => null,
             'email' => null,
             'email_verified_at' => null,

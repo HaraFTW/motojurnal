@@ -24,20 +24,14 @@
         @method('PUT')
 
         <div class="space-y-5 rounded-2xl border border-zinc-800 bg-zinc-950 p-5">
-            <div>
-                <label for="oil_edit_total_kilometers_{{ $entry->id }}" class="mb-2 block text-sm font-medium text-zinc-300">Total kilometri</label>
-                <input
-                    id="oil_edit_total_kilometers_{{ $entry->id }}"
-                    name="total_kilometers"
-                    type="number"
-                    inputmode="decimal"
-                    step="0.1"
-                    min="0"
-                    value="{{ old('total_kilometers', $entry->total_kilometers) }}"
-                    class="{{ $inputClass }}"
-                    required
-                >
-            </div>
+            <x-distance-input
+                name="total_kilometers"
+                field="total_kilometers"
+                :id="'oil_edit_total_kilometers_'.$entry->id"
+                :km-value="$entry->total_kilometers"
+                :input-class="$inputClass"
+                required
+            />
 
             <x-toggle-switch name="oil_filter" label="Filtru schimbat" :checked="$entry->oil_filter" />
             <x-toggle-switch name="gasket" label="Garnituri schimbate" :checked="$entry->gasket" />

@@ -125,20 +125,7 @@
             @endif
 
             <div class="space-y-5 rounded-2xl border border-zinc-800 bg-zinc-900 p-5">
-                <div>
-                    <label for="total_kilometers" class="mb-2 block text-sm font-medium text-zinc-300">Total kilometri</label>
-                    <input
-                        id="total_kilometers"
-                        name="total_kilometers"
-                        type="number"
-                        inputmode="decimal"
-                        step="0.1"
-                        min="0"
-                        value="{{ old('total_kilometers') }}"
-                        class="block w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3.5 text-base text-zinc-100 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30"
-                        required
-                    >
-                </div>
+                <x-distance-input name="total_kilometers" field="total_kilometers" required />
 
                 <x-toggle-switch name="oil_filter" label="Filtru schimbat" />
                 <x-toggle-switch name="gasket" label="Garnituri schimbate" />

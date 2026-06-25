@@ -297,5 +297,6 @@ return [
         'oil_brand'                => 'brand ulei',
         'oil_type_id'              => 'tip ulei',
         'event_type_id'            => 'tip eveniment',
+        'event_date'               => 'data eveniment',
     ],
 ];

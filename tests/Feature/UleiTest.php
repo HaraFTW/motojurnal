@@ -71,6 +71,22 @@ class UleiTest extends TestCase
         $this->assertDatabaseCount('tipuri_ulei', 24);
     }
 
+    public function test_oil_types_are_ordered_by_priority_in_select(): void
+    {
+        $user = User::factory()->create(['plate_number' => 'B123ABC']);
+
+        $first = TipUlei::query()->where('oil_type', '0W-20')->firstOrFail();
+        $second = TipUlei::query()->where('oil_type', '5W-30')->firstOrFail();
+
+        $first->update(['priority' => 2]);
+        $second->update(['priority' => 1]);
+
+        $response = $this->actingAs($user)->get('/ulei');
+
+        $response->assertOk();
+        $response->assertSeeInOrder(['5W-30', '0W-20'], false);
+    }
+
     public function test_user_only_sees_own_ulei_entries(): void
     {
         $user = User::factory()->create(['plate_number' => 'B123ABC']);

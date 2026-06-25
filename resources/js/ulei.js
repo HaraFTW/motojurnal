@@ -7,11 +7,45 @@ import { initDialog, initDialogTriggers, initEditingEntry } from './dialogs.js';
 window.$ = window.jQuery = $;
 select2(window, $);
 
+function matchesInOrder(text, term) {
+    const haystack = text.toLowerCase();
+    const needle = term.toLowerCase().trim();
+
+    if (needle === '') {
+        return true;
+    }
+
+    let startAt = 0;
+
+    for (const char of needle) {
+        const index = haystack.indexOf(char, startAt);
+
+        if (index === -1) {
+            return false;
+        }
+
+        startAt = index + 1;
+    }
+
+    return true;
+}
+
 const select2Options = {
     width: '100%',
     placeholder: 'Selectează tipul de ulei',
     allowClear: true,
     minimumResultsForSearch: 5,
+    matcher(params, data) {
+        if (params.term === undefined || params.term.trim() === '') {
+            return data;
+        }
+
+        if (typeof data.text === 'undefined') {
+            return null;
+        }
+
+        return matchesInOrder(data.text, params.term) ? data : null;
+    },
 };
 
 function initOilTypeSelect() {

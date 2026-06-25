@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Concerns\AuthorizesUserOwnership;
+use App\Http\Controllers\Concerns\ConvertsDistanceInput;
 use App\Models\Combustibil;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,7 +12,7 @@ use Illuminate\View\View;
 
 class CombustibilController extends Controller
 {
-    use AuthorizesUserOwnership;
+    use AuthorizesUserOwnership, ConvertsDistanceInput;
 
     public function index(): View
     {
@@ -27,7 +28,10 @@ class CombustibilController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate($this->validationRules());
+        $validated = $this->convertDistanceFieldsToKm(
+            $request->validate($this->validationRules()),
+            ['kilometers', 'total_kilometers'],
+        );
 
         auth()->user()->combustibil()->create($validated);
 
@@ -50,7 +54,10 @@ class CombustibilController extends Controller
                 ->withErrors($validator);
         }
 
-        $combustibil->update($validator->validated());
+        $combustibil->update($this->convertDistanceFieldsToKm(
+            $validator->validated(),
+            ['kilometers', 'total_kilometers'],
+        ));
 
         return redirect()
             ->route('fuel.index')

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'user_id',
     'kilometers',
     'event_type_id',
+    'event_date',
     'observations',
 ])]
 class Event extends Model
@@ -37,6 +38,7 @@ class Event extends Model
     {
         return [
             'kilometers' => 'decimal:1',
+            'event_date' => 'date',
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Concerns\AuthorizesUserOwnership;
+use App\Http\Controllers\Concerns\ConvertsDistanceInput;
 use App\Models\TipUlei;
 use App\Models\Ulei;
 use Illuminate\Http\RedirectResponse;
@@ -13,7 +14,7 @@ use Illuminate\View\View;
 
 class UleiController extends Controller
 {
-    use AuthorizesUserOwnership;
+    use AuthorizesUserOwnership, ConvertsDistanceInput;
 
     public function index(): View
     {
@@ -25,7 +26,7 @@ class UleiController extends Controller
 
         $oilTypes = TipUlei::query()
             ->active()
-            ->orderBy('oil_type')
+            ->orderBy('priority')
             ->get();
 
         return view('oil.index', compact('entries', 'oilTypes'));
@@ -33,7 +34,10 @@ class UleiController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate($this->validationRules());
+        $validated = $this->convertDistanceFieldsToKm(
+            $request->validate($this->validationRules()),
+            ['total_kilometers'],
+        );
 
         auth()->user()->ulei()->create([
             ...$validated,
@@ -60,7 +64,10 @@ class UleiController extends Controller
                 ->withErrors($validator);
         }
 
-        $validated = $validator->validated();
+        $validated = $this->convertDistanceFieldsToKm(
+            $validator->validated(),
+            ['total_kilometers'],
+        );
 
         $ulei->update([
             ...$validated,

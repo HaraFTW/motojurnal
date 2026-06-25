@@ -33,19 +33,26 @@
             @endif
 
             <div>
-                <label for="event_edit_kilometers_{{ $entry->id }}" class="mb-2 block text-sm font-medium text-zinc-300">Kilometri</label>
+                <label for="event_edit_date_{{ $entry->id }}" class="mb-2 block text-sm font-medium text-zinc-300">
+                    Data <span class="font-normal text-zinc-500">(optional)</span>
+                </label>
                 <input
-                    id="event_edit_kilometers_{{ $entry->id }}"
-                    name="kilometers"
-                    type="number"
-                    inputmode="decimal"
-                    step="0.1"
-                    min="0"
-                    value="{{ old('kilometers', $entry->kilometers) }}"
-                    class="{{ $inputClass }}"
-                    required
+                    id="event_edit_date_{{ $entry->id }}"
+                    name="event_date"
+                    type="date"
+                    value="{{ old('event_date', $entry->event_date->format('Y-m-d')) }}"
+                    class="{{ $inputClass }} [color-scheme:dark]"
                 >
             </div>
+
+            <x-distance-input
+                name="kilometers"
+                field="kilometers"
+                :id="'event_edit_kilometers_'.$entry->id"
+                :km-value="$entry->kilometers"
+                :input-class="$inputClass"
+                required
+            />
 
             <div>
                 <label for="event_edit_observations_{{ $entry->id }}" class="mb-2 block text-sm font-medium text-zinc-300">

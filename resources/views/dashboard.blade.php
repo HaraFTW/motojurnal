@@ -5,7 +5,6 @@
 @section('content')
     <div class="space-y-4">
         <h1 class="text-2xl font-semibold tracking-tight text-zinc-50">
-            Acasă
         </h1>
 
         <div class="space-y-3">
@@ -17,6 +16,11 @@
                     :active="request()->routeIs($item['route'])"
                 />
             @endforeach
+        </div>
+
+        <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-5">
+            <p class="mb-3 text-sm font-medium text-zinc-300">Unitate distanță</p>
+            <x-distance-unit-switch class="w-full" />
         </div>
     </div>
 @endsection

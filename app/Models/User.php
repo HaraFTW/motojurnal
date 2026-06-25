@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\DistanceUnit;
+use App\Support\Distance;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -12,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['plate_number', 'name', 'email', 'password'])]
+#[Fillable(['plate_number', 'distance_unit', 'name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -71,6 +73,51 @@ class User extends Authenticatable
         return $this->hasMany(Event::class);
     }
 
+    public function usesMiles(): bool
+    {
+        return ($this->distance_unit ?? DistanceUnit::Km) === DistanceUnit::Miles;
+    }
+
+    public function distanceFieldLabel(string $field): string
+    {
+        return match ($field) {
+            'kilometers' => $this->usesMiles() ? 'Mile' : 'Kilometri',
+            'total_kilometers' => $this->usesMiles() ? 'Total mile' : 'Total kilometri',
+            default => throw new \InvalidArgumentException("Unknown distance field [{$field}]."),
+        };
+    }
+
+    public function kmToDisplay(?float $kilometers): ?float
+    {
+        if ($kilometers === null) {
+            return null;
+        }
+
+        if ($this->usesMiles()) {
+            return round($kilometers / Distance::KM_PER_MILE, 1);
+        }
+
+        return round($kilometers, 1);
+    }
+
+    public function displayToKm(float $value): float
+    {
+        if ($this->usesMiles()) {
+            return round($value * Distance::KM_PER_MILE, 1);
+        }
+
+        return round($value, 1);
+    }
+
+    public function formatDistance(?float $kilometers): string
+    {
+        if ($kilometers === null) {
+            return '';
+        }
+
+        return number_format($this->kmToDisplay($kilometers), 1, '.', '');
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -79,6 +126,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
+            'distance_unit' => DistanceUnit::class,
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
