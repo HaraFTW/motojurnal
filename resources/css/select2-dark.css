@@ -107,6 +107,14 @@
     border-color: #27272a;
 }
 
+dialog.fuel-chart-dialog .select2-container {
+    z-index: 1;
+}
+
+dialog.fuel-chart-dialog .select2-dropdown {
+    z-index: 2;
+}
+
 .select2-container--open .select2-dropdown--below {
     border-top: none;
     border-top-left-radius: 0;

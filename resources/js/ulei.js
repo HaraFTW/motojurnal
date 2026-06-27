@@ -48,6 +48,25 @@ const select2Options = {
     },
 };
 
+function initOilTypeSelectInDialog(dialog) {
+    const select = dialog.querySelector('.oil-type-select-edit');
+
+    if (! select) {
+        return;
+    }
+
+    const $select = $(select);
+
+    if ($select.hasClass('select2-hidden-accessible')) {
+        $select.select2('destroy');
+    }
+
+    $select.select2({
+        ...select2Options,
+        dropdownParent: $(dialog),
+    });
+}
+
 function initOilTypeSelect() {
     const oilTypeSelect = document.querySelector('#oil_type_id');
 
@@ -59,33 +78,13 @@ function initOilTypeSelect() {
 }
 
 function initOilEditSelects() {
-    const initSelectInDialog = (dialogId) => {
-        const dialog = document.getElementById(dialogId);
-
-        if (! dialog) {
-            return;
-        }
-
-        const select = dialog.querySelector('.oil-type-select-edit');
-
-        if (! select || $(select).hasClass('select2-hidden-accessible')) {
-            return;
-        }
-
-        $(select).select2(select2Options);
-    };
-
-    document.querySelectorAll('[data-open-dialog^="oil-edit-"]').forEach((button) => {
-        button.addEventListener('click', () => {
-            initSelectInDialog(button.dataset.openDialog ?? '');
+    document.querySelectorAll('dialog[id^="oil-edit-"]').forEach((dialog) => {
+        dialog.addEventListener('toggle', () => {
+            if (dialog.open) {
+                initOilTypeSelectInDialog(dialog);
+            }
         });
     });
-
-    const editingMarker = document.getElementById('oil-editing-entry');
-
-    if (editingMarker?.dataset.editDialog) {
-        initSelectInDialog(editingMarker.dataset.editDialog);
-    }
 }
 
 function initOilPage() {
@@ -94,6 +93,16 @@ function initOilPage() {
     initDialog('oil-history-open', 'oil-history-dialog', 'data-oil-history-close');
     initDialogTriggers();
     initEditingEntry('oil-editing-entry');
+
+    const editingMarker = document.getElementById('oil-editing-entry');
+
+    if (editingMarker?.dataset.editDialog) {
+        const dialog = document.getElementById(editingMarker.dataset.editDialog);
+
+        if (dialog?.open) {
+            initOilTypeSelectInDialog(dialog);
+        }
+    }
 }
 
 if (document.readyState === 'loading') {

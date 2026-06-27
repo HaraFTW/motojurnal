@@ -18,7 +18,7 @@
                         class="inline-flex items-center gap-2 rounded-xl border border-zinc-700 px-3 py-2 text-sm font-medium text-zinc-300 transition hover:border-zinc-600 hover:bg-zinc-900 hover:text-zinc-100 active:bg-zinc-800"
                     >
                         <x-fa-icon name="right-from-bracket" class="size-4" />
-                        <span class="hidden sm:inline">Ieșire</span>
+                        <span>Ieșire</span>
                     </button>
                 </form>
             </div>
