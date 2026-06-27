@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->decimal('kilometers', 10, 1)->nullable();
+            $table->decimal('kilometers', 10, 3)->nullable();
             $table->foreignId('event_type_id')->nullable()->constrained('event_types')->nullOnDelete();
             $table->string('observations')->nullable();
             $table->timestamps();

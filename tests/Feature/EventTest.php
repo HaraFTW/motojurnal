@@ -110,7 +110,7 @@ class EventTest extends TestCase
         $response = $this->actingAs($user)->get('/evenimente');
 
         $response->assertOk();
-        $response->assertSee('1000.0', false);
+        $response->assertSee('1000.000', false);
         $response->assertDontSee('2000.0', false);
         $response->assertSee('id="events-history-open"', false);
     }

@@ -63,7 +63,7 @@
                                 @if ($entry->kilometers !== null)
                                     <div>
                                         <dt class="text-zinc-500">Kilometri</dt>
-                                        <dd class="font-medium text-zinc-100">{{ number_format($entry->kilometers, 1, '.', '') }}</dd>
+                                        <dd class="font-medium text-zinc-100"><x-formatted-decimal :value="$entry->kilometers" /></dd>
                                     </div>
                                 @endif
                             </dl>

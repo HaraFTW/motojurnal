@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Concerns\AuthorizesUserOwnership;
 use App\Http\Controllers\Concerns\ConvertsDistanceInput;
+use App\Support\Decimal;
 use App\Models\Event;
 use App\Models\EventType;
 use Illuminate\Http\RedirectResponse;
@@ -112,7 +113,7 @@ class EventController extends Controller
                 'required',
                 Rule::exists('event_types', 'id')->where('active', true),
             ],
-            'kilometers' => ['required', 'decimal:0,1', 'min:0'],
+            'kilometers' => Decimal::validationRule(),
             'event_date' => ['nullable', 'date'],
             'observations' => ['nullable', 'string', 'max:255'],
         ];

@@ -57,7 +57,7 @@
                                 @if ($entry->total_kilometers !== null)
                                     <div>
                                         <dt class="text-zinc-500">Total km</dt>
-                                        <dd class="font-medium text-zinc-100">{{ number_format($entry->total_kilometers, 1, '.', '') }}</dd>
+                                        <dd class="font-medium text-zinc-100"><x-formatted-decimal :value="$entry->total_kilometers" /></dd>
                                     </div>
                                 @endif
                                 <div>
@@ -71,7 +71,7 @@
                                 @if ($entry->oil_amount !== null)
                                     <div>
                                         <dt class="text-zinc-500">Cantitate</dt>
-                                        <dd class="font-medium text-zinc-100">{{ number_format($entry->oil_amount, 1, '.', '') }} L</dd>
+                                        <dd class="font-medium text-zinc-100"><x-formatted-decimal :value="$entry->oil_amount" /> L</dd>
                                     </div>
                                 @endif
                                 @if ($entry->oil_brand)
@@ -139,7 +139,7 @@
                         name="oil_amount"
                         type="number"
                         inputmode="decimal"
-                        step="0.1"
+                        step="0.001"
                         min="0"
                         value="{{ old('oil_amount') }}"
                         class="block w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3.5 text-base text-zinc-100 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30"

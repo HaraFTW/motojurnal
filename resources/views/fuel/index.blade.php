@@ -77,31 +77,31 @@
                                 @if ($entry->kilometers !== null)
                                     <div>
                                         <dt class="text-zinc-500">Kilometri</dt>
-                                        <dd class="font-medium text-zinc-100">{{ number_format($entry->kilometers, 1, '.', '') }}</dd>
+                                        <dd class="font-medium text-zinc-100"><x-formatted-decimal :value="$entry->kilometers" /></dd>
                                     </div>
                                 @endif
                                 @if ($entry->liters !== null)
                                     <div>
                                         <dt class="text-zinc-500">Litri</dt>
-                                        <dd class="font-medium text-zinc-100">{{ number_format($entry->liters, 1, '.', '') }}</dd>
+                                        <dd class="font-medium text-zinc-100"><x-formatted-decimal :value="$entry->liters" /></dd>
                                     </div>
                                 @endif
                                 @if ($entry->total_price !== null)
                                     <div>
                                         <dt class="text-zinc-500">Pret total</dt>
-                                        <dd class="font-medium text-zinc-100">{{ number_format($entry->total_price, 1, '.', '') }}</dd>
+                                        <dd class="font-medium text-zinc-100"><x-formatted-decimal :value="$entry->total_price" /></dd>
                                     </div>
                                 @endif
                                 @if ($entry->price_per_liter !== null)
                                     <div>
                                         <dt class="text-zinc-500">Pret / litru</dt>
-                                        <dd class="font-medium text-zinc-100">{{ number_format($entry->price_per_liter, 1, '.', '') }}</dd>
+                                        <dd class="font-medium text-zinc-100"><x-formatted-decimal :value="$entry->price_per_liter" /></dd>
                                     </div>
                                 @endif
                                 @if ($entry->total_kilometers !== null)
                                     <div>
                                         <dt class="text-zinc-500">Total km</dt>
-                                        <dd class="font-medium text-zinc-100">{{ number_format($entry->total_kilometers, 1, '.', '') }}</dd>
+                                        <dd class="font-medium text-zinc-100"><x-formatted-decimal :value="$entry->total_kilometers" /></dd>
                                     </div>
                                 @endif
                             </dl>
@@ -177,7 +177,7 @@
                         name="liters"
                         type="number"
                         inputmode="decimal"
-                        step="0.1"
+                        step="0.001"
                         min="0"
                         value="{{ old('liters') }}"
                         class="block w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3.5 text-base text-zinc-100 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30"
@@ -194,7 +194,7 @@
                         name="total_price"
                         type="number"
                         inputmode="decimal"
-                        step="0.1"
+                        step="0.001"
                         min="0"
                         value="{{ old('total_price') }}"
                         class="block w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3.5 text-base text-zinc-100 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30"
@@ -210,7 +210,7 @@
                         name="price_per_liter"
                         type="number"
                         inputmode="decimal"
-                        step="0.1"
+                        step="0.001"
                         min="0"
                         value="{{ old('price_per_liter') }}"
                         class="block w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3.5 text-base text-zinc-100 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30"

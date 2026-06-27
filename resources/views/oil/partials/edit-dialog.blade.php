@@ -45,7 +45,7 @@
                     name="oil_amount"
                     type="number"
                     inputmode="decimal"
-                    step="0.1"
+                    step="0.001"
                     min="0"
                     value="{{ old('oil_amount', $entry->oil_amount) }}"
                     class="{{ $inputClass }}"

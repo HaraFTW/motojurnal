@@ -26,7 +26,7 @@
         name="{{ $name }}"
         type="number"
         inputmode="decimal"
-        step="0.1"
+        step="{{ \App\Support\Decimal::INPUT_STEP }}"
         min="0"
         value="{{ $displayValue }}"
         class="{{ $inputClass }}"

@@ -18,7 +18,7 @@ class CombustibilTest extends TestCase
             'liters' => '8.2',
         ]);
 
-        $this->assertSame(6.8, $entry->fuelConsumptionPer100Km());
+        $this->assertSame(6.805, $entry->fuelConsumptionPer100Km());
     }
 
     public function test_fuel_consumption_returns_null_without_kilometers_or_liters(): void

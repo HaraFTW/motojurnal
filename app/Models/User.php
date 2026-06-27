@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\DistanceUnit;
+use App\Support\Decimal;
 use App\Support\Distance;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -94,19 +95,19 @@ class User extends Authenticatable
         }
 
         if ($this->usesMiles()) {
-            return round($kilometers / Distance::KM_PER_MILE, 1);
+            return Decimal::round($kilometers / Distance::KM_PER_MILE);
         }
 
-        return round($kilometers, 1);
+        return Decimal::round($kilometers);
     }
 
     public function displayToKm(float $value): float
     {
         if ($this->usesMiles()) {
-            return round($value * Distance::KM_PER_MILE, 1);
+            return Decimal::round($value * Distance::KM_PER_MILE);
         }
 
-        return round($value, 1);
+        return Decimal::round($value);
     }
 
     public function formatDistance(?float $kilometers): string
@@ -115,7 +116,7 @@ class User extends Authenticatable
             return '';
         }
 
-        return number_format($this->kmToDisplay($kilometers), 1, '.', '');
+        return Decimal::format($this->kmToDisplay($kilometers));
     }
 
     /**

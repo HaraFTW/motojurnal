@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('ulei', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->decimal('total_kilometers', 10, 1)->nullable();
+            $table->decimal('total_kilometers', 10, 3)->nullable();
             $table->boolean('oil_filter')->default(false);
             $table->boolean('gasket')->default(false);
-            $table->decimal('oil_amount', 10, 1)->nullable();
+            $table->decimal('oil_amount', 10, 3)->nullable();
             $table->string('oil_brand')->nullable();
             $table->foreignId('oil_type_id')->nullable()->constrained('tipuri_ulei')->nullOnDelete();
             $table->string('observations')->nullable();

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Decimal;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -42,7 +43,7 @@ class Combustibil extends Model
             return null;
         }
 
-        return round(((float) $this->liters / $kilometers) * 100, 2);
+        return Decimal::round(((float) $this->liters / $kilometers) * 100);
     }
 
     /**
@@ -79,11 +80,11 @@ class Combustibil extends Model
     protected function casts(): array
     {
         return [
-            'kilometers' => 'decimal:1',
-            'liters' => 'decimal:1',
-            'total_price' => 'decimal:1',
-            'price_per_liter' => 'decimal:1',
-            'total_kilometers' => 'decimal:1',
+            'kilometers' => 'decimal:3',
+            'liters' => 'decimal:3',
+            'total_price' => 'decimal:3',
+            'price_per_liter' => 'decimal:3',
+            'total_kilometers' => 'decimal:3',
         ];
     }
 }

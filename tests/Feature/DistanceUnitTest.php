@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Enums\DistanceUnit;
 use App\Models\User;
+use App\Support\Decimal;
 use App\Support\Distance;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -35,7 +36,7 @@ class DistanceUnitTest extends TestCase
         ]);
 
         $miles = 100.0;
-        $kilometers = round($miles * Distance::KM_PER_MILE, 1);
+        $kilometers = Decimal::round($miles * Distance::KM_PER_MILE);
 
         $response = $this->actingAs($user)->post('/combustibil', [
             'kilometers' => (string) $miles,
@@ -81,8 +82,8 @@ class DistanceUnitTest extends TestCase
         $response = $this->actingAs($user)->get('/combustibil');
 
         $response->assertOk();
-        $response->assertSee('160.9', false);
-        $response->assertSee('45230.0', false);
+        $response->assertSee('160.900', false);
+        $response->assertSee('45230.000', false);
         $response->assertSee('Kilometri', false);
         $response->assertSee('Total km', false);
     }

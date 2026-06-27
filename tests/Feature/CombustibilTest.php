@@ -67,7 +67,7 @@ class CombustibilTest extends TestCase
         $response = $this->actingAs($user)->get('/combustibil');
 
         $response->assertOk();
-        $response->assertSee('10.0', false);
+        $response->assertSee('10.000', false);
         $response->assertDontSee('20.0', false);
         $response->assertSee('id="fuel-history-open"', false);
     }

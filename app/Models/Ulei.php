@@ -42,10 +42,10 @@ class Ulei extends Model
     protected function casts(): array
     {
         return [
-            'total_kilometers' => 'decimal:1',
+            'total_kilometers' => 'decimal:3',
             'oil_filter' => 'boolean',
             'gasket' => 'boolean',
-            'oil_amount' => 'decimal:1',
+            'oil_amount' => 'decimal:3',
         ];
     }
 }

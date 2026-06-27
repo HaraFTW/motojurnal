@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Concerns\AuthorizesUserOwnership;
 use App\Http\Controllers\Concerns\ConvertsDistanceInput;
+use App\Support\Decimal;
 use App\Models\TipUlei;
 use App\Models\Ulei;
 use Illuminate\Http\RedirectResponse;
@@ -97,10 +98,10 @@ class UleiController extends Controller
     private function validationRules(): array
     {
         return [
-            'total_kilometers' => ['required', 'decimal:0,1', 'min:0'],
+            'total_kilometers' => Decimal::validationRule(),
             'oil_filter' => ['sometimes', 'boolean'],
             'gasket' => ['sometimes', 'boolean'],
-            'oil_amount' => ['nullable', 'decimal:0,1', 'min:0'],
+            'oil_amount' => Decimal::validationRule(required: false),
             'oil_brand' => ['nullable', 'string', 'max:255'],
             'oil_type_id' => [
                 'nullable',

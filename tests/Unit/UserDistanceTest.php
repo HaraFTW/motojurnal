@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Enums\DistanceUnit;
 use App\Models\User;
+use App\Support\Decimal;
 use App\Support\Distance;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -21,7 +22,7 @@ class UserDistanceTest extends TestCase
 
         $this->assertSame(120.5, $user->kmToDisplay(120.5));
         $this->assertSame(120.5, $user->displayToKm(120.5));
-        $this->assertSame('120.5', $user->formatDistance(120.5));
+        $this->assertSame('120.500', $user->formatDistance(120.5));
         $this->assertSame('Kilometri', $user->distanceFieldLabel('kilometers'));
         $this->assertSame('Total kilometri', $user->distanceFieldLabel('total_kilometers'));
     }
@@ -34,11 +35,11 @@ class UserDistanceTest extends TestCase
         ]);
 
         $miles = 100.0;
-        $kilometers = round($miles * Distance::KM_PER_MILE, 1);
+        $kilometers = Decimal::round($miles * Distance::KM_PER_MILE);
 
         $this->assertSame($miles, $user->kmToDisplay($kilometers));
         $this->assertSame($kilometers, $user->displayToKm($miles));
-        $this->assertSame('100.0', $user->formatDistance($kilometers));
+        $this->assertSame('100.000', $user->formatDistance($kilometers));
         $this->assertSame('Mile', $user->distanceFieldLabel('kilometers'));
         $this->assertSame('Total mile', $user->distanceFieldLabel('total_kilometers'));
     }

@@ -37,7 +37,7 @@ class Event extends Model
     protected function casts(): array
     {
         return [
-            'kilometers' => 'decimal:1',
+            'kilometers' => 'decimal:3',
             'event_date' => 'date',
         ];
     }

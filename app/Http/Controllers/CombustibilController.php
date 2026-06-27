@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Concerns\AuthorizesUserOwnership;
 use App\Http\Controllers\Concerns\ConvertsDistanceInput;
+use App\Support\Decimal;
 use App\Models\Combustibil;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -81,11 +82,11 @@ class CombustibilController extends Controller
     private function validationRules(): array
     {
         return [
-            'kilometers' => ['required', 'decimal:0,1', 'min:0'],
-            'liters' => ['required', 'decimal:0,1', 'min:0'],
-            'total_price' => ['nullable', 'decimal:0,1', 'min:0'],
-            'price_per_liter' => ['nullable', 'decimal:0,1', 'min:0'],
-            'total_kilometers' => ['nullable', 'decimal:0,1', 'min:0'],
+            'kilometers' => Decimal::validationRule(),
+            'liters' => Decimal::validationRule(),
+            'total_price' => Decimal::validationRule(required: false),
+            'price_per_liter' => Decimal::validationRule(required: false),
+            'total_kilometers' => Decimal::validationRule(required: false),
             'observations' => ['nullable', 'string', 'max:255'],
         ];
     }
