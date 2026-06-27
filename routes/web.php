@@ -4,8 +4,11 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CombustibilController;
 use App\Http\Controllers\DistanceUnitController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ManifestController;
 use App\Http\Controllers\UleiController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/manifest.webmanifest', ManifestController::class)->name('manifest');
 
 Route::get('/', function () {
     return auth()->check()
