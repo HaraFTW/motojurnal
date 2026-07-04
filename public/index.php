@@ -11,8 +11,9 @@ define('LARAVEL_START', microtime(true));
 |--------------------------------------------------------------------------
 |
 | Local:  index.php lives in the project's public/ folder.
-| Shared hosting: public/ is copied to public_html/motojurnal/ while the
-| app is cloned to /home/motojurnal/ (sibling of public_html).
+| Shared hosting: copy public/ to public_html/ and keep the app in a
+| sibling motojurnal/ folder (e.g. /home/user/public_html + /home/user/motojurnal).
+| Legacy: public/ may live in public_html/motojurnal/ instead.
 |
 | Override anytime with LARAVEL_ROOT in the server environment or .env
 | (loaded later; for index.php use SetEnv in .htaccess if needed).
@@ -22,8 +23,9 @@ $laravelRoot = getenv('LARAVEL_ROOT') ?: null;
 
 if (! $laravelRoot) {
     $candidates = [
-        dirname(__DIR__, 2).DIRECTORY_SEPARATOR.'motojurnal',
         __DIR__.DIRECTORY_SEPARATOR.'..',
+        dirname(__DIR__).DIRECTORY_SEPARATOR.'motojurnal',
+        dirname(__DIR__, 2).DIRECTORY_SEPARATOR.'motojurnal',
     ];
 
     foreach ($candidates as $candidate) {
