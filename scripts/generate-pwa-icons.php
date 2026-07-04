@@ -55,9 +55,11 @@ function resizePng($image, int $size, string $path, int $padding = 0): void
 }
 
 $sizes = [
-  180 => 'apple-touch-icon.png',
-  192 => 'icon-192.png',
-  512 => 'icon-512.png',
+    16 => 'favicon-16x16.png',
+    32 => 'favicon-32x32.png',
+    180 => 'apple-touch-icon.png',
+    192 => 'icon-192.png',
+    512 => 'icon-512.png',
 ];
 
 foreach ($sizes as $size => $filename) {
@@ -68,4 +70,16 @@ resizePng($image, 512, $outputDir.'/icon-512-maskable.png', padding: 64);
 
 imagedestroy($image);
 
+$favicon32 = $outputDir.'/favicon-32x32.png';
+$faviconIco = __DIR__.'/../public/favicon.ico';
+$png = file_get_contents($favicon32);
+
+if ($png !== false) {
+    $ico = pack('vvv', 0, 1, 1)
+        .pack('CCCCvvVV', 32, 32, 0, 0, 1, 32, strlen($png), 6 + 16)
+        .$png;
+    file_put_contents($faviconIco, $ico);
+}
+
 echo "Icons written to {$outputDir}\n";
+echo "Favicon written to {$faviconIco}\n";
