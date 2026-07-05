@@ -183,7 +183,7 @@
                     >
                 </div>
 
-                @include('fuel.partials.optional-fields')
+                @include('fuel.partials.optional-fields', ['entry' => null])
             </div>
 
             <button

@@ -90,6 +90,41 @@ class CombustibilTest extends TestCase
         $response->assertSee('"consumption":6.5', false);
     }
 
+    public function test_create_form_optional_fields_do_not_inherit_last_entry_values(): void
+    {
+        $user = User::factory()->create(['plate_number' => 'B123ABC']);
+
+        Combustibil::create([
+            'user_id' => $user->id,
+            'kilometers' => '100.0',
+            'liters' => '9.5',
+            'total_price' => '83.0',
+            'price_per_liter' => '8.7',
+        ]);
+
+        $response = $this->actingAs($user)->get('/combustibil');
+
+        $response->assertOk();
+        $this->assertDoesNotMatchRegularExpression(
+            '/id="total_price"[^>]*value="83/',
+            $response->getContent(),
+        );
+        $this->assertDoesNotMatchRegularExpression(
+            '/id="price_per_liter"[^>]*value="8\.7/',
+            $response->getContent(),
+        );
+
+        preg_match_all(
+            '/<form method="POST" action="[^"]*" class="fuel-entry-form[^"]*">.*?<\/form>/s',
+            $response->getContent(),
+            $forms,
+        );
+
+        $this->assertNotEmpty($forms[0]);
+        $createForm = end($forms[0]);
+        $this->assertStringNotContainsString('<details class="group rounded-xl border border-zinc-800 bg-zinc-950/60" open', $createForm);
+    }
+
     public function test_fuel_chart_button_hidden_without_complete_entries(): void
     {
         $user = User::factory()->create(['plate_number' => 'B123ABC']);
