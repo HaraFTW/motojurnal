@@ -36,6 +36,7 @@ class CombustibilTest extends TestCase
             'user_id' => $user->id,
             'kilometers' => '120.5',
             'liters' => '8.2',
+            'consum' => '6.805',
             'total_price' => '65.4',
             'price_per_liter' => '7.9',
             'total_kilometers' => '45230.0',
@@ -125,6 +126,7 @@ class CombustibilTest extends TestCase
             'id' => $entry->id,
             'kilometers' => '150.0',
             'liters' => '7.5',
+            'consum' => '5.000',
         ]);
     }
 

@@ -19,7 +19,7 @@
         </button>
     </div>
 
-    <form method="POST" action="{{ route('fuel.update', $entry) }}" class="space-y-4 overflow-y-auto px-4 py-4">
+    <form method="POST" action="{{ route('fuel.update', $entry) }}" class="fuel-entry-form space-y-4 overflow-y-auto px-4 py-4">
         @csrf
         @method('PUT')
 
@@ -30,6 +30,7 @@
                 :id="'fuel_edit_kilometers_'.$entry->id"
                 :km-value="$entry->kilometers"
                 :input-class="$inputClass"
+                label-suffix="(de la ultimul plin)"
                 required
             />
 
@@ -48,59 +49,7 @@
                 >
             </div>
 
-            <div>
-                <label for="fuel_edit_total_price_{{ $entry->id }}" class="mb-2 block text-sm font-medium text-zinc-300">
-                    Pret total <span class="font-normal text-zinc-500">(optional)</span>
-                </label>
-                <input
-                    id="fuel_edit_total_price_{{ $entry->id }}"
-                    name="total_price"
-                    type="number"
-                    inputmode="decimal"
-                    step="0.001"
-                    min="0"
-                    value="{{ old('total_price', $entry->total_price) }}"
-                    class="{{ $inputClass }}"
-                >
-            </div>
-
-            <div>
-                <label for="fuel_edit_price_per_liter_{{ $entry->id }}" class="mb-2 block text-sm font-medium text-zinc-300">
-                    Pret per litru <span class="font-normal text-zinc-500">(optional)</span>
-                </label>
-                <input
-                    id="fuel_edit_price_per_liter_{{ $entry->id }}"
-                    name="price_per_liter"
-                    type="number"
-                    inputmode="decimal"
-                    step="0.001"
-                    min="0"
-                    value="{{ old('price_per_liter', $entry->price_per_liter) }}"
-                    class="{{ $inputClass }}"
-                >
-            </div>
-
-            <x-distance-input
-                name="total_kilometers"
-                field="total_kilometers"
-                :id="'fuel_edit_total_kilometers_'.$entry->id"
-                :km-value="$entry->total_kilometers"
-                :input-class="$inputClass"
-                optional
-            />
-
-            <div>
-                <label for="fuel_edit_observations_{{ $entry->id }}" class="mb-2 block text-sm font-medium text-zinc-300">
-                    Observatii <span class="font-normal text-zinc-500">(optional)</span>
-                </label>
-                <textarea
-                    id="fuel_edit_observations_{{ $entry->id }}"
-                    name="observations"
-                    rows="3"
-                    maxlength="255"
-                    class="{{ $inputClass }} resize-none"
-                >{{ old('observations', $entry->observations) }}</textarea>
-            </div>
+            @include('fuel.partials.optional-fields', ['entry' => $entry, 'inputClass' => $inputClass])
         </div>
 
         <button

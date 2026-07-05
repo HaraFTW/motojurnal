@@ -20,6 +20,13 @@ class Combustibil extends Model
 {
     protected $table = 'combustibil';
 
+    protected static function booted(): void
+    {
+        static::saving(function (self $entry): void {
+            $entry->consum = self::calculateConsum($entry->kilometers, $entry->liters);
+        });
+    }
+
     /**
      * @return BelongsTo<User, $this>
      */
@@ -29,21 +36,29 @@ class Combustibil extends Model
     }
 
     /**
-     * Liters per 100 km, or null when it cannot be calculated.
+     * Liters per 100 km from the given distance and fuel amount, or null when it cannot be calculated.
      */
-    public function fuelConsumptionPer100Km(): ?float
+    public static function calculateConsum(float|string|null $kilometers, float|string|null $liters): ?float
     {
-        if ($this->kilometers === null || $this->liters === null) {
+        if ($kilometers === null || $liters === null) {
             return null;
         }
 
-        $kilometers = (float) $this->kilometers;
+        $kilometers = (float) $kilometers;
 
         if ($kilometers <= 0) {
             return null;
         }
 
-        return Decimal::round(((float) $this->liters / $kilometers) * 100);
+        return Decimal::round(((float) $liters / $kilometers) * 100);
+    }
+
+    /**
+     * Liters per 100 km for this entry, or null when it cannot be calculated.
+     */
+    public function fuelConsumptionPer100Km(): ?float
+    {
+        return self::calculateConsum($this->kilometers, $this->liters);
     }
 
     /**
@@ -52,25 +67,13 @@ class Combustibil extends Model
     public static function consumptionChartDataForUser(User $user): array
     {
         return $user->combustibil()
-            ->whereNotNull('kilometers')
-            ->whereNotNull('liters')
-            ->where('kilometers', '>', 0)
+            ->whereNotNull('consum')
             ->oldest()
             ->get()
-            ->map(function (self $entry): ?array {
-                $consumption = $entry->fuelConsumptionPer100Km();
-
-                if ($consumption === null) {
-                    return null;
-                }
-
-                return [
-                    'timestamp' => $entry->created_at->format('d.m.Y H:i'),
-                    'consumption' => $consumption,
-                ];
-            })
-            ->filter()
-            ->values()
+            ->map(fn (self $entry): array => [
+                'timestamp' => $entry->created_at->format('d.m.Y H:i'),
+                'consumption' => (float) $entry->consum,
+            ])
             ->all();
     }
 
@@ -82,6 +85,7 @@ class Combustibil extends Model
         return [
             'kilometers' => 'decimal:3',
             'liters' => 'decimal:3',
+            'consum' => 'decimal:3',
             'total_price' => 'decimal:3',
             'price_per_liter' => 'decimal:3',
             'total_kilometers' => 'decimal:3',

@@ -7,7 +7,7 @@ if ($source === null || ! is_file($source)) {
     exit(1);
 }
 
-$outputDir = __DIR__.'/../public/icons';
+$outputDir = __DIR__.'/../public/app-icons';
 
 if (! is_dir($outputDir) && ! mkdir($outputDir, 0777, true) && ! is_dir($outputDir)) {
     fwrite(STDERR, "Could not create {$outputDir}\n");

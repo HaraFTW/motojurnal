@@ -2,14 +2,12 @@
 
 @section('title', 'Combustibil — ' . config('app.name'))
 
-@if ($entries->isNotEmpty() || count($consumptionChartData) > 0)
-    @push('scripts')
-        @if (count($consumptionChartData) > 0)
-            <script type="application/json" id="fuel-chart-data">@json($consumptionChartData)</script>
-        @endif
-        @vite(['resources/js/combustibil.js'])
-    @endpush
-@endif
+@push('scripts')
+    @if (count($consumptionChartData) > 0)
+        <script type="application/json" id="fuel-chart-data">@json($consumptionChartData)</script>
+    @endif
+    @vite(['resources/js/combustibil.js'])
+@endpush
 
 @section('content')
     <div class="space-y-6">
@@ -154,7 +152,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('fuel.store') }}" class="space-y-4">
+        <form method="POST" action="{{ route('fuel.store') }}" class="fuel-entry-form space-y-4">
             @csrf
 
             @if ($errors->any())
@@ -168,7 +166,7 @@
             @endif
 
             <div class="space-y-4 rounded-2xl border border-zinc-800 bg-zinc-900 p-5">
-                <x-distance-input name="kilometers" field="kilometers" required />
+                <x-distance-input name="kilometers" field="kilometers" label-suffix="(de la ultimul plin)" required />
 
                 <div>
                     <label for="liters" class="mb-2 block text-sm font-medium text-zinc-300">Litri combustibil</label>
@@ -185,52 +183,7 @@
                     >
                 </div>
 
-                <div>
-                    <label for="total_price" class="mb-2 block text-sm font-medium text-zinc-300">
-                        Pret total <span class="font-normal text-zinc-500">(optional)</span>
-                    </label>
-                    <input
-                        id="total_price"
-                        name="total_price"
-                        type="number"
-                        inputmode="decimal"
-                        step="0.001"
-                        min="0"
-                        value="{{ old('total_price') }}"
-                        class="block w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3.5 text-base text-zinc-100 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30"
-                    >
-                </div>
-
-                <div>
-                    <label for="price_per_liter" class="mb-2 block text-sm font-medium text-zinc-300">
-                        Pret per litru <span class="font-normal text-zinc-500">(optional)</span>
-                    </label>
-                    <input
-                        id="price_per_liter"
-                        name="price_per_liter"
-                        type="number"
-                        inputmode="decimal"
-                        step="0.001"
-                        min="0"
-                        value="{{ old('price_per_liter') }}"
-                        class="block w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3.5 text-base text-zinc-100 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30"
-                    >
-                </div>
-
-                <x-distance-input name="total_kilometers" field="total_kilometers" optional />
-
-                <div>
-                    <label for="observations" class="mb-2 block text-sm font-medium text-zinc-300">
-                        Observatii <span class="font-normal text-zinc-500">(optional)</span>
-                    </label>
-                    <textarea
-                        id="observations"
-                        name="observations"
-                        rows="3"
-                        maxlength="255"
-                        class="block w-full resize-none rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3.5 text-base text-zinc-100 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30"
-                    >{{ old('observations') }}</textarea>
-                </div>
+                @include('fuel.partials.optional-fields')
             </div>
 
             <button

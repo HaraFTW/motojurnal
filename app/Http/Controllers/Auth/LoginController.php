@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Combustibil;
+use App\Models\Ulei;
 use App\Models\User;
 use App\Rules\PlateNumber;
 use Illuminate\Http\RedirectResponse;
@@ -14,7 +16,11 @@ class LoginController extends Controller
 {
     public function create(): View
     {
-        return view('auth.login');
+        return view('auth.login', [
+            'userCount' => User::count(),
+            'fuelFillCount' => Combustibil::count(),
+            'oilChangeCount' => Ulei::count(),
+        ]);
     }
 
     public function store(Request $request): RedirectResponse

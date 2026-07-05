@@ -3,6 +3,88 @@ import { initDialog, initDialogTriggers, initEditingEntry } from './dialogs.js';
 
 Chart.register(...registerables);
 
+function parsePositiveNumber(value) {
+    if (value.trim() === '') {
+        return null;
+    }
+
+    const number = Number.parseFloat(value);
+
+    return Number.isFinite(number) && number > 0 ? number : null;
+}
+
+function formatPrice(value) {
+    return (Math.round(value * 100) / 100).toFixed(2);
+}
+
+function initFuelPriceCalculation(form) {
+    const litersInput = form.querySelector('[name="liters"]');
+    const totalPriceInput = form.querySelector('[data-fuel-price-field="total"]');
+    const pricePerLiterInput = form.querySelector('[data-fuel-price-field="per-liter"]');
+
+    if (! litersInput || ! totalPriceInput || ! pricePerLiterInput) {
+        return;
+    }
+
+    let updating = false;
+
+    const setValue = (input, value) => {
+        updating = true;
+        input.value = value;
+        updating = false;
+    };
+
+    const updatePricePerLiter = () => {
+        const liters = parsePositiveNumber(litersInput.value);
+        const totalPrice = parsePositiveNumber(totalPriceInput.value);
+
+        if (liters === null || totalPriceInput.value.trim() === '' || totalPrice === null) {
+            return;
+        }
+
+        setValue(pricePerLiterInput, formatPrice(totalPrice / liters));
+    };
+
+    const updateTotalPrice = () => {
+        const liters = parsePositiveNumber(litersInput.value);
+        const pricePerLiter = parsePositiveNumber(pricePerLiterInput.value);
+
+        if (liters === null || pricePerLiterInput.value.trim() === '' || pricePerLiter === null) {
+            return;
+        }
+
+        setValue(totalPriceInput, formatPrice(liters * pricePerLiter));
+    };
+
+    totalPriceInput.addEventListener('keyup', () => {
+        if (! updating) {
+            updatePricePerLiter();
+        }
+    });
+
+    pricePerLiterInput.addEventListener('keyup', () => {
+        if (! updating) {
+            updateTotalPrice();
+        }
+    });
+
+    litersInput.addEventListener('keyup', () => {
+        if (updating) {
+            return;
+        }
+
+        if (totalPriceInput.value.trim() !== '') {
+            updatePricePerLiter();
+        } else if (pricePerLiterInput.value.trim() !== '') {
+            updateTotalPrice();
+        }
+    });
+}
+
+function initFuelPriceForms() {
+    document.querySelectorAll('.fuel-entry-form').forEach(initFuelPriceCalculation);
+}
+
 function initFuelChart() {
     const openButton = document.getElementById('fuel-chart-open');
     const dialog = document.getElementById('fuel-chart-dialog');
@@ -120,6 +202,7 @@ function initFuelChart() {
 }
 
 function initFuelPage() {
+    initFuelPriceForms();
     initDialog('fuel-history-open', 'fuel-history-dialog', 'data-fuel-history-close');
     initDialogTriggers();
     initEditingEntry('fuel-editing-entry');

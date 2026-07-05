@@ -23,12 +23,25 @@ class CombustibilTest extends TestCase
 
     public function test_fuel_consumption_returns_null_without_kilometers_or_liters(): void
     {
-        $this->assertNull((new Combustibil(['liters' => '8.2']))->fuelConsumptionPer100Km());
-        $this->assertNull((new Combustibil(['kilometers' => '100.0']))->fuelConsumptionPer100Km());
-        $this->assertNull((new Combustibil(['kilometers' => '0.0', 'liters' => '8.2']))->fuelConsumptionPer100Km());
+        $this->assertNull(Combustibil::calculateConsum(null, '8.2'));
+        $this->assertNull(Combustibil::calculateConsum('100.0', null));
+        $this->assertNull(Combustibil::calculateConsum('0.0', '8.2'));
     }
 
-    public function test_consumption_chart_data_only_includes_complete_entries_for_user(): void
+    public function test_consum_is_persisted_when_entry_is_saved(): void
+    {
+        $user = User::factory()->create(['plate_number' => 'B123ABC']);
+
+        $entry = Combustibil::create([
+            'user_id' => $user->id,
+            'kilometers' => '120.5',
+            'liters' => '8.2',
+        ]);
+
+        $this->assertSame('6.805', $entry->fresh()->consum);
+    }
+
+    public function test_consumption_chart_data_uses_stored_consum_column(): void
     {
         $user = User::factory()->create(['plate_number' => 'B123ABC']);
         $other = User::factory()->create(['plate_number' => 'C999XYZ']);
