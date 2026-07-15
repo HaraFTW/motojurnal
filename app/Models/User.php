@@ -82,6 +82,52 @@ class User extends Authenticatable
         return $this->hasMany(Reminder::class);
     }
 
+    /**
+     * Oil-change reminder messages based on the latest ulei entry vs current odometer / date.
+     *
+     * @return list<string>
+     */
+    public function oilChangeToastMessages(): array
+    {
+        $lastOil = $this->ulei()->latest('created_at')->first();
+
+        if ($lastOil === null) {
+            return [];
+        }
+
+        $messages = [];
+
+        if (
+            $this->kilometers !== null
+            && $lastOil->total_kilometers !== null
+            && ((float) $this->kilometers - (float) $lastOil->total_kilometers) > 5000
+        ) {
+            $messages[] = 'Probabil au trecut 5000 kilometri de la ultimul schimb de ulei';
+        }
+
+        if ($lastOil->created_at !== null && $lastOil->created_at->lte(now()->subYear())) {
+            $messages[] = 'Probabil a trecut un an de la ultimul schimb de ulei';
+        }
+
+        return $messages;
+    }
+
+    public function updateKilometersFromOdometer(float $reading): void
+    {
+        $this->forceFill([
+            'kilometers' => Decimal::round($reading),
+        ])->save();
+    }
+
+    public function addTripKilometers(float $trip): void
+    {
+        $current = $this->kilometers !== null ? (float) $this->kilometers : 0.0;
+
+        $this->forceFill([
+            'kilometers' => Decimal::round($current + $trip),
+        ])->save();
+    }
+
     public function usesMiles(): bool
     {
         return ($this->distance_unit ?? DistanceUnit::Km) === DistanceUnit::Miles;
@@ -136,6 +182,7 @@ class User extends Authenticatable
     {
         return [
             'distance_unit' => DistanceUnit::class,
+            'kilometers' => 'decimal:3',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];

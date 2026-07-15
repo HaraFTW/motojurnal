@@ -20,6 +20,17 @@ class Ulei extends Model
 {
     protected $table = 'ulei';
 
+    protected static function booted(): void
+    {
+        static::created(function (self $entry): void {
+            if ($entry->total_kilometers === null || $entry->user === null) {
+                return;
+            }
+
+            $entry->user->updateKilometersFromOdometer((float) $entry->total_kilometers);
+        });
+    }
+
     /**
      * @return BelongsTo<User, $this>
      */

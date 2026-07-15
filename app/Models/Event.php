@@ -15,6 +15,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 ])]
 class Event extends Model
 {
+    protected static function booted(): void
+    {
+        static::created(function (self $entry): void {
+            if ($entry->kilometers === null || $entry->user === null) {
+                return;
+            }
+
+            $entry->user->updateKilometersFromOdometer((float) $entry->kilometers);
+        });
+    }
+
     /**
      * @return BelongsTo<User, $this>
      */

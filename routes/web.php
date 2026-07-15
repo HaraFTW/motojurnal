@@ -42,4 +42,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/reminders/{reminder}/solve', [ReminderController::class, 'toggleSolved'])->name('reminders.toggle-solved');
     Route::delete('/reminders/{reminder}', [ReminderController::class, 'destroy'])->name('reminders.destroy');
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
+    Route::post('/oil-change-toasts/dismiss', function () {
+        session(['oil_change_toasts_dismissed' => true]);
+
+        return response()->noContent();
+    })->name('oil-change-toasts.dismiss');
 });

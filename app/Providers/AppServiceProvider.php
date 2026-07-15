@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Auth\Events\Login;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -25,34 +27,47 @@ class AppServiceProvider extends ServiceProvider
             URL::forceRootUrl($rootUrl);
         }
 
-        View::composer('layouts.app', function ($view): void {
-            if (! auth()->check() || request()->routeIs('reminders.*')) {
-                $view->with('expiringReminders', []);
+        // New login/session: allow oil toasts again until the user closes them.
+        Event::listen(Login::class, function (): void {
+            session()->forget('oil_change_toasts_dismissed');
+        });
 
-                return;
+        View::composer('layouts.app', function ($view): void {
+            $expiringReminders = [];
+            $oilChangeToasts = [];
+
+            if (auth()->check()) {
+                if (! session('oil_change_toasts_dismissed')) {
+                    $oilChangeToasts = auth()->user()->oilChangeToastMessages();
+                }
+
+                if (! request()->routeIs('reminders.*')) {
+                    $user = auth()->user();
+
+                    $reminders = $user->reminders()->expiringSoon()->get()
+                        ->concat($user->reminders()->recentlyExpired()->get())
+                        ->sortBy('ending_date')
+                        ->values();
+
+                    $expiringReminders = $reminders
+                        ->map(function ($reminder) {
+                            $isExpired = $reminder->ending_date->copy()->startOfDay()->lt(now()->startOfDay());
+
+                            return [
+                                'message' => $isExpired
+                                    ? $reminder->expiredToastMessage()
+                                    : $reminder->expirationToastMessage(),
+                                'expired' => $isExpired,
+                            ];
+                        })
+                        ->all();
+                }
             }
 
-            $user = auth()->user();
-
-            $reminders = $user->reminders()->expiringSoon()->get()
-                ->concat($user->reminders()->recentlyExpired()->get())
-                ->sortBy('ending_date')
-                ->values();
-
-            $messages = $reminders
-                ->map(function ($reminder) {
-                    $isExpired = $reminder->ending_date->copy()->startOfDay()->lt(now()->startOfDay());
-
-                    return [
-                        'message' => $isExpired
-                            ? $reminder->expiredToastMessage()
-                            : $reminder->expirationToastMessage(),
-                        'expired' => $isExpired,
-                    ];
-                })
-                ->all();
-
-            $view->with('expiringReminders', $messages);
+            $view->with([
+                'expiringReminders' => $expiringReminders,
+                'oilChangeToasts' => $oilChangeToasts,
+            ]);
         });
     }
 }

@@ -31,7 +31,7 @@
         </main>
 
         @auth
-            @if (! empty($expiringReminders))
+            @if (! empty($expiringReminders) || ! empty($oilChangeToasts))
                 @include('partials.reminder-toasts')
             @endif
             @include('partials.bottom-nav')

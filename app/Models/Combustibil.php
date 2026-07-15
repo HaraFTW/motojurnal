@@ -25,6 +25,24 @@ class Combustibil extends Model
         static::saving(function (self $entry): void {
             $entry->consum = self::calculateConsum($entry->kilometers, $entry->liters);
         });
+
+        static::created(function (self $entry): void {
+            $user = $entry->user;
+
+            if ($user === null) {
+                return;
+            }
+
+            if ($entry->total_kilometers !== null) {
+                $user->updateKilometersFromOdometer((float) $entry->total_kilometers);
+
+                return;
+            }
+
+            if ($entry->kilometers !== null) {
+                $user->addTripKilometers((float) $entry->kilometers);
+            }
+        });
     }
 
     /**
