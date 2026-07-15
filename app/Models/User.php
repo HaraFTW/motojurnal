@@ -74,6 +74,14 @@ class User extends Authenticatable
         return $this->hasMany(Event::class);
     }
 
+    /**
+     * @return HasMany<Reminder, $this>
+     */
+    public function reminders(): HasMany
+    {
+        return $this->hasMany(Reminder::class);
+    }
+
     public function usesMiles(): bool
     {
         return ($this->distance_unit ?? DistanceUnit::Km) === DistanceUnit::Miles;

@@ -5,6 +5,7 @@ use App\Http\Controllers\CombustibilController;
 use App\Http\Controllers\DistanceUnitController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ManifestController;
+use App\Http\Controllers\ReminderController;
 use App\Http\Controllers\UleiController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,5 +37,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/evenimente', [EventController::class, 'store'])->name('events.store');
     Route::put('/evenimente/{event}', [EventController::class, 'update'])->name('events.update');
     Route::delete('/evenimente/{event}', [EventController::class, 'destroy'])->name('events.destroy');
+    Route::get('/reminders', [ReminderController::class, 'index'])->name('reminders.index');
+    Route::post('/reminders', [ReminderController::class, 'store'])->name('reminders.store');
+    Route::patch('/reminders/{reminder}/solve', [ReminderController::class, 'toggleSolved'])->name('reminders.toggle-solved');
+    Route::delete('/reminders/{reminder}', [ReminderController::class, 'destroy'])->name('reminders.destroy');
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 });

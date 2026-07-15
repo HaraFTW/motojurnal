@@ -22,6 +22,17 @@
     background-color: rgb(0 0 0 / 0.65);
 }
 
+.login-about-dialog:modal {
+    position: fixed;
+    inset: unset;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    margin: 0;
+    max-height: calc(100dvh - 2rem);
+    overflow: auto;
+}
+
 .login-about-inline-icon {
     display: inline-flex;
     vertical-align: -0.2em;

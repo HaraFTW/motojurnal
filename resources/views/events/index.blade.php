@@ -130,7 +130,7 @@
                 <div class="space-y-4 rounded-2xl border border-zinc-800 bg-zinc-900 p-5">
                     <div>
                         <label for="event_date" class="mb-2 block text-sm font-medium text-zinc-300">
-                            Data <span class="font-normal text-zinc-500">(optional)</span>
+                            Data <span class="font-normal text-zinc-500">(opțional)</span>
                         </label>
                         <input
                             id="event_date"
@@ -145,7 +145,7 @@
 
                     <div>
                         <label for="observations" class="mb-2 block text-sm font-medium text-zinc-300">
-                            Observatii <span class="font-normal text-zinc-500">(optional)</span>
+                            Observații <span class="font-normal text-zinc-500">(opțional)</span>
                         </label>
                         <textarea
                             id="observations"

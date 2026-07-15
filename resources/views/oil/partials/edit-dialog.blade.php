@@ -38,7 +38,7 @@
 
             <div>
                 <label for="oil_edit_amount_{{ $entry->id }}" class="mb-2 block text-sm font-medium text-zinc-300">
-                    Cantitate ulei <span class="font-normal text-zinc-500">(optional)</span>
+                    Cantitate ulei <span class="font-normal text-zinc-500">(opțional)</span>
                 </label>
                 <input
                     id="oil_edit_amount_{{ $entry->id }}"
@@ -54,7 +54,7 @@
 
             <div>
                 <label for="oil_edit_brand_{{ $entry->id }}" class="mb-2 block text-sm font-medium text-zinc-300">
-                    Brand ulei <span class="font-normal text-zinc-500">(optional)</span>
+                    Brand ulei <span class="font-normal text-zinc-500">(opțional)</span>
                 </label>
                 <input
                     id="oil_edit_brand_{{ $entry->id }}"
@@ -68,7 +68,7 @@
 
             <div>
                 <label for="oil_edit_type_{{ $entry->id }}" class="mb-2 block text-sm font-medium text-zinc-300">
-                    Tip ulei <span class="font-normal text-zinc-500">(optional)</span>
+                    Tip ulei <span class="font-normal text-zinc-500">(opțional)</span>
                 </label>
                 <select
                     id="oil_edit_type_{{ $entry->id }}"
@@ -90,7 +90,7 @@
 
             <div>
                 <label for="oil_edit_observations_{{ $entry->id }}" class="mb-2 block text-sm font-medium text-zinc-300">
-                    Observatii <span class="font-normal text-zinc-500">(optional)</span>
+                    Observații <span class="font-normal text-zinc-500">(opțional)</span>
                 </label>
                 <textarea
                     id="oil_edit_observations_{{ $entry->id }}"

@@ -16,6 +16,13 @@
                     :active="request()->routeIs($item['route'])"
                 />
             @endforeach
+
+            <x-nav-tile
+                :href="route('reminders.index')"
+                icon="bell"
+                label="Remindere"
+                :active="request()->routeIs('reminders.*')"
+            />
         </div>
 
         <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-5">

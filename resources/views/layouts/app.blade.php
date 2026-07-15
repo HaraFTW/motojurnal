@@ -31,6 +31,9 @@
         </main>
 
         @auth
+            @if (! empty($expiringReminders))
+                @include('partials.reminder-toasts')
+            @endif
             @include('partials.bottom-nav')
         @else
             @include('partials.footer')

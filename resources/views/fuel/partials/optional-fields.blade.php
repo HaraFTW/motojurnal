@@ -21,7 +21,7 @@
     <div class="space-y-4 border-t border-zinc-800 px-4 pb-4 pt-4">
         <div style="margin-block-start: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-y-reverse)));">
             <label for="{{ $idPrefix }}total_price" class="mb-2 block text-sm font-medium text-zinc-300">
-                Pret total <span class="font-normal text-zinc-500">(optional)</span>
+                Preț total <span class="font-normal text-zinc-500">(opțional)</span>
             </label>
             <input
                 id="{{ $idPrefix }}total_price"
@@ -38,7 +38,7 @@
 
         <div>
             <label for="{{ $idPrefix }}price_per_liter" class="mb-2 block text-sm font-medium text-zinc-300">
-                Pret per litru <span class="font-normal text-zinc-500">(optional)</span>
+                Preț per litru <span class="font-normal text-zinc-500">(opțional)</span>
             </label>
             <input
                 id="{{ $idPrefix }}price_per_liter"
@@ -64,7 +64,7 @@
 
         <div>
             <label for="{{ $idPrefix }}observations" class="mb-2 block text-sm font-medium text-zinc-300">
-                Observatii <span class="font-normal text-zinc-500">(optional)</span>
+                Observații <span class="font-normal text-zinc-500">(opțional)</span>
             </label>
             <textarea
                 id="{{ $idPrefix }}observations"

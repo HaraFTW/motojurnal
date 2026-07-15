@@ -86,13 +86,13 @@
                                 @endif
                                 @if ($entry->total_price !== null)
                                     <div>
-                                        <dt class="text-zinc-500">Pret total</dt>
+                                        <dt class="text-zinc-500">Preț total</dt>
                                         <dd class="font-medium text-zinc-100"><x-formatted-decimal :value="$entry->total_price" /></dd>
                                     </div>
                                 @endif
                                 @if ($entry->price_per_liter !== null)
                                     <div>
-                                        <dt class="text-zinc-500">Pret / litru</dt>
+                                        <dt class="text-zinc-500">Preț / litru</dt>
                                         <dd class="font-medium text-zinc-100"><x-formatted-decimal :value="$entry->price_per_liter" /></dd>
                                     </div>
                                 @endif

@@ -34,7 +34,7 @@
 
             <div>
                 <label for="event_edit_date_{{ $entry->id }}" class="mb-2 block text-sm font-medium text-zinc-300">
-                    Data <span class="font-normal text-zinc-500">(optional)</span>
+                    Data <span class="font-normal text-zinc-500">(opțional)</span>
                 </label>
                 <input
                     id="event_edit_date_{{ $entry->id }}"
@@ -56,7 +56,7 @@
 
             <div>
                 <label for="event_edit_observations_{{ $entry->id }}" class="mb-2 block text-sm font-medium text-zinc-300">
-                    Observatii <span class="font-normal text-zinc-500">(optional)</span>
+                    Observații <span class="font-normal text-zinc-500">(opțional)</span>
                 </label>
                 <textarea
                     id="event_edit_observations_{{ $entry->id }}"

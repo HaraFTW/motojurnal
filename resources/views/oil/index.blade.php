@@ -132,7 +132,7 @@
 
                 <div>
                     <label for="oil_amount" class="mb-2 block text-sm font-medium text-zinc-300">
-                        Cantitate ulei <span class="font-normal text-zinc-500">(optional)</span>
+                        Cantitate ulei <span class="font-normal text-zinc-500">(opțional)</span>
                     </label>
                     <input
                         id="oil_amount"
@@ -148,7 +148,7 @@
 
                 <div>
                     <label for="oil_brand" class="mb-2 block text-sm font-medium text-zinc-300">
-                        Brand ulei <span class="font-normal text-zinc-500">(optional)</span>
+                        Brand ulei <span class="font-normal text-zinc-500">(opțional)</span>
                     </label>
                     <input
                         id="oil_brand"
@@ -162,7 +162,7 @@
 
                 <div>
                     <label for="oil_type_id" class="mb-2 block text-sm font-medium text-zinc-300">
-                        Tip ulei <span class="font-normal text-zinc-500">(optional)</span>
+                        Tip ulei <span class="font-normal text-zinc-500">(opțional)</span>
                     </label>
                     <select
                         id="oil_type_id"
@@ -180,7 +180,7 @@
 
                 <div>
                     <label for="observations" class="mb-2 block text-sm font-medium text-zinc-300">
-                        Observatii <span class="font-normal text-zinc-500">(optional)</span>
+                        Observații <span class="font-normal text-zinc-500">(opțional)</span>
                     </label>
                     <textarea
                         id="observations"
