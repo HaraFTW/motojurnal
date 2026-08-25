@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminFileController;
+use App\Http\Controllers\Admin\AdminSessionController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CombustibilController;
 use App\Http\Controllers\DistanceUnitController;
@@ -15,6 +17,19 @@ Route::get('/', function () {
     return auth()->check()
         ? redirect()->route('dashboard')
         : redirect()->route('login');
+});
+
+Route::middleware('admin.gate')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [AdminSessionController::class, 'create'])->name('unlock');
+    Route::post('/', [AdminSessionController::class, 'store'])->name('unlock.store');
+
+    Route::middleware('admin.unlocked')->group(function () {
+        Route::get('/files', [AdminFileController::class, 'index'])->name('files.index');
+        Route::post('/files', [AdminFileController::class, 'store'])->name('files.store');
+        Route::get('/files/{adminFile}/download', [AdminFileController::class, 'download'])->name('files.download');
+        Route::put('/files/{adminFile}', [AdminFileController::class, 'update'])->name('files.update');
+        Route::delete('/files/{adminFile}', [AdminFileController::class, 'destroy'])->name('files.destroy');
+    });
 });
 
 Route::middleware('guest')->group(function () {

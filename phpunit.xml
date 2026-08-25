@@ -33,5 +33,8 @@
         <env name="PULSE_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
+        <env name="ADMIN_GATE_KEY" value="420"/>
+        <env name="ADMIN_GATE_VALUE" value="69"/>
+        <env name="ADMIN_PASSWORD" value="test-admin-password"/>
     </php>
 </phpunit>

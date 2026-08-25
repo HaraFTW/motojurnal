@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Middleware\EnsureAdminGate;
+use App\Http\Middleware\EnsureAdminUnlocked;
+use App\Support\PhpUploadLimit;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Exceptions\PostTooLargeException;
 use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -14,9 +18,23 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->redirectGuestsTo(fn () => route('login'));
         $middleware->redirectUsersTo(fn () => route('dashboard'));
+        $middleware->alias([
+            'admin.gate' => EnsureAdminGate::class,
+            'admin.unlocked' => EnsureAdminUnlocked::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*'),
         );
+
+        $exceptions->render(function (PostTooLargeException $e, Request $request) {
+            if ($request->is('admin', 'admin/*')) {
+                $max = PhpUploadLimit::formatted();
+
+                return redirect()
+                    ->back()
+                    ->withErrors(['file' => "Fișierul depășește limita de încărcare ({$max})."]);
+            }
+        });
     })->create();
