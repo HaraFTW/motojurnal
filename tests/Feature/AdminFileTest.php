@@ -106,9 +106,27 @@ class AdminFileTest extends TestCase
             'stored_path' => 'admin-files/stored.pdf',
         ]);
 
+        $response = $this->asAdmin()->get(route('admin.files.download', $file));
+
+        $response->assertOk();
+        $this->assertStringContainsString('inline', (string) $response->headers->get('content-disposition'));
+        $this->assertStringContainsString('report (1).pdf', (string) $response->headers->get('content-disposition'));
+    }
+
+    public function test_office_files_are_downloaded_as_attachments(): void
+    {
+        Storage::fake('local');
+        Storage::disk('local')->put('admin-files/stored.doc', 'contents');
+
+        $file = AdminFile::factory()->create([
+            'name' => 'notes.doc',
+            'stored_path' => 'admin-files/stored.doc',
+            'mime_type' => 'application/msword',
+        ]);
+
         $this->asAdmin()
             ->get(route('admin.files.download', $file))
-            ->assertDownload('report (1).pdf');
+            ->assertDownload('notes.doc');
     }
 
     public function test_file_name_and_extra_can_be_updated(): void

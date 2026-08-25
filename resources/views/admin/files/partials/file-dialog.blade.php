@@ -20,10 +20,19 @@
 
         <a
             href="{{ route('admin.files.download', $file) }}"
+            @if ($file->isBrowserPreviewable())
+                target="_blank"
+                rel="noopener noreferrer"
+            @endif
             class="flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 text-sm font-semibold text-zinc-100 transition hover:border-zinc-600 hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
         >
-            <x-fa-icon name="download" class="size-4" />
-            Descarcă
+            @if ($file->isBrowserPreviewable())
+                <x-fa-icon name="eye" class="size-4" />
+                Deschide
+            @else
+                <x-fa-icon name="download" class="size-4" />
+                Descarcă
+            @endif
         </a>
 
         <form method="POST" action="{{ route('admin.files.update', $file) }}" class="space-y-4">

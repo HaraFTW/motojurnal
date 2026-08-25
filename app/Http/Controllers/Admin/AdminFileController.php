@@ -94,7 +94,18 @@ class AdminFileController extends Controller
     {
         abort_unless(Storage::disk('local')->exists($adminFile->stored_path), 404);
 
-        return Storage::disk('local')->download($adminFile->stored_path, $adminFile->name);
+        $disk = Storage::disk('local');
+        $headers = [];
+
+        if (filled($adminFile->mime_type)) {
+            $headers['Content-Type'] = $adminFile->mime_type;
+        }
+
+        if ($adminFile->isBrowserPreviewable()) {
+            return $disk->response($adminFile->stored_path, $adminFile->name, $headers);
+        }
+
+        return $disk->download($adminFile->stored_path, $adminFile->name, $headers);
     }
 
     public function update(Request $request, AdminFile $adminFile): RedirectResponse
